@@ -8,7 +8,6 @@
 #include <unistd.h>
 
 #include "sched_config_extractors.h"
-#include "hw_accel.h"
 
 FPGAML::SchedConfig::SchedConfig (WeeConfig& config)
 {

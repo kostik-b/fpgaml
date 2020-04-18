@@ -1,8 +1,22 @@
 // Copyright QUB 2019
 
 #include "scheduler.h"
-#include "hw_accel.h"
 #include <cpp/WeeLogger.h>
+
+// gap filler
+static void PR_Slot(unsigned long long Board_ID,unsigned int FPGA_ID, unsigned int PR_ID,
+                unsigned long long *sched_addr,
+                unsigned long long *dcplr_addr,
+                unsigned long long *mlbx_wraddr,
+                unsigned long long *mlbx_rdaddr,
+                unsigned long long *ICAP_addr)
+{
+  *sched_addr   = 0;
+  *dcplr_addr   = 0;
+  *mlbx_wraddr  = 0;
+  *mlbx_rdaddr  = 0;
+  *ICAP_addr    = 0;
+}
 
 FPGAML::Scheduler::Scheduler (
   unsigned long long Board_ID,
