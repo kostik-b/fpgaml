@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConfigParams>
+    <LogLevel>1</LogLevel>
+    <BitstreamsPath>/home/bitstreams</BitstreamsPath>
+    <EnableBitstreamMmap>false</EnableBitstreamMmap>
+    <SchedPollingInterval>0.0001</SchedPollingInterval>
+
+    <!-- Driver Paths -->
+    <UnimemDriverPath>/dev/unimem_buffer_allocator</UnimemDriverPath>
+    <CtrlDriverPath>/dev/null</CtrlDriverPath>
+    <MainDriverPath>/dev/null</MainDriverPath>
+
+    <!-- The list of Programmable Regions (or islands) -->
+    <PRs>
+      <PR>
+        <BoardID>0</BoardID>
+        <FpgaID>1</FpgaID>
+        <PRID>1</PRID>
+      </PR>
+      <PR>
+        <BoardID>0</BoardID>
+        <FpgaID>1</FpgaID>
+        <PRID>3</PRID>
+      </PR>
+    </PRs>
+</ConfigParams>

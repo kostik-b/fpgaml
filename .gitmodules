@@ -1,0 +1,6 @@
+[submodule "aux-src/weelogger"]
+	path = aux-src/weelogger
+	url = https://github.com/kostik-b/weelogger.git
+[submodule "aux-src/PicoSHA2"]
+	path = aux-src/PicoSHA2
+	url = https://github.com/okdshin/PicoSHA2.git

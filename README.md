@@ -1,0 +1,142 @@
+# OpenCL FPGA Management Layer
+* =================================================================
+* This file is part of “Ecoscale OpenCL FPGA Management Layer Library software” (hereinafter the “Software”)
+*
+* =================================================================
+* Developer(s):     Konstantin Bakanov, The Queen's University of Belfast, Northern Ireland,
+*                   Nhat Phuong Tran, The Queen's University of Belfast, Northern Ireland.
+* Principal
+* Investigator(s):      Prof. Dimitrios Nikolopoulos, The Queen's University of Belfast, Northern Ireland.
+*
+* The project (“Energy-efficient Heterogeneous COmputing at exaSCALE - EcoScale”) leading to this Software has received 
+* funding from the European Commission under 671632 — ECOSCALE — H2020-FETHPC-2014/H2020-FETHPC-2014.
+*
+* Copyright 2015-2019, The Queen's University of Belfast, Northern Ireland
+* =================================================================
+* Licensed under the GNU Lesser General Public License, as published by the Free Software Foundation, either version 3 or at your option any later version (hereinafter the "License");
+* you must not use this Software except in compliance with the terms of the License.
+*
+* Unless required by applicable law or agreed upon in writing, this Software is distributed on an "AS IS" BASIS, WITHOUT ANY WARRANTY;
+* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, neither express nor implied.
+* For details see terms of the License (see attached file: README. The License is also available at https://www.gnu.org/licenses/lgpl-3.0.en.html
+* =================================================================
+
+
+
+# Purpose and Description
+The purpose of this library is to serve as an OpenCL compliant interface
+to an FPGA accelerator. This library was developed as a part of EcoScale
+project - http://www.ecoscale.eu/. Technical University of Crete provided the Linux drivers and Xilinx FPGAs.
+
+The overall structure is as follows:
+- A target application is a regular OpenCL application with regular OpenCL calls (v1.2).
+- OpenCL kernels had been compiled into bitstreams, which are saved in Base64 format
+  in the XML files. These same XML files contain additional information about a given
+  bitstream, such as workgroup size, offsets for writing the parameters, resource string etc.
+- The memory for OpenCL buffers is allocated using a Linux kernel module - unimem\_buffer\_alloc.
+  This is required by the FPGA drivers.
+- The OpenCL kernel file is ignored except for the first line, which should contain the name of
+  the corresponding bitstream's XML file.
+- The workgroup (local) size in the code must be equal to the workgroup size specified
+  in the bitstream's XML file; the global size of an NDRANGE should be a multiple of a local size.
+- The communication with the FPGAs happens through schedulers. This release only includes scheduler
+  simulators. The real schedulers for Xilinx FPGAs have been developed, but cannot be released.
+  However, you may develop your own schedulers by implementing the interface outlined in scheduler.h.
+  The ML\_SIM makefile variable allows to switch between real and simulator schedulers.
+- Each FPGA is considered to be made of multiple reconfigurable regions (islands). This mapping is provided
+  in the configuration file.
+- There are two scheduling algorithms which schedule workgroups on the reconfigurable regions: algo\_simple
+  and algo\_slicing. There is no automatic selection of the algorithms, the selection is done manually in the
+  dispatcher by invoking the "route\_ndrange" method on a given algorithm object.
+- The library was designed to reconfigure FPGA islands on-the-fly, however this was not implemented.
+  Nevertheless, the reconf\_controller class was created and added to the library, but is not really used.
+
+# What This Library Is Not
+- This library was created as a part of the research project with a particular goal of supporting
+  specific FPGAs and specific applications. As such it does not aim to be a full implementation of
+  the OpenCL specification 1.2. Only a required subset of the functinality is implemented.
+- This library was written based on the device model developed by the EcoScale consortium.
+- This library is a research outcome and does not have a product grade quality. The testing
+  is scarce.
+- The logging is not very informative and was created for easy debugging.
+- This library does not handle multi-dimensional NDRANGEs, it only handles one-dimensional ones.
+
+# Installation
+This library can be compiled standalone or as part of a Petalinux SDK.
+
+If compiling as a part of Petalinux SDK, the library needs to be created with `petalinux-create -t libs -n fpga-ml`. 
+Then entire contents of components/libs/fpga-ml can be replaced with this repository. 
+The following instructions describe the compilation process from that point onwards (these are automatically generated by the SDK when creating a library).
+
+## PetaLinux User Library Template
+===================================
+
+This directory contains a PetaLinux user library created from a template.
+
+If you are developing your library from scratch, simply start editing the
+file libfpga-ml.c.
+
+You can easily import any existing library code by copying it into this 
+directory, and editing the automatically generated Makefile as you want.
+
+Before building the library, you will need to enable the library from
+PetaLinux menuconfig by running:
+    "petalinux-config -c rootfs"
+You will see your library in the "Libs --->" submenu.
+
+To build your library, simply run the "petlainux-build -c rootfs/fpga-ml".
+This command will build your library and will install your library into
+the target file system host copy.
+
+You need to rebuild the project using the following command:
+    "petalinux-build"
+    
+You will also need to rebuild PetaLinux bootable images so that the images
+is updated with the updated target filesystem copy, run this command:
+    "petalinux-build -x package"
+
+To add extra source code files (for example, to split a large library into 
+multiple source files), add the relevant .o files to the list in the local 
+Makefile where indicated.
+
+To have other files (for example library configuration files or scripts) 
+copied into the root file system, add addition lines under the "install:"
+target in the Makefile.  For example
+
+$(TARGETINST) myfile.conf /etc
+
+	Copy the file myfile.conf from this directory into the /etc directory
+	on the Embedded Linux filesystem)
+
+$(TARGETINST) -a "some text here" /etc/system.conf
+	
+	Add the line "some text here" to the /etc/system.conf file.
+
+See ${PETALINUX}/components/rootfs/targetroot-inst.sh for details and more options.
+
+# Directories Structure
+The code is divided into two parts: the core contained in the cpp folder and the OpenCL wrapper code
+contained in the il folder. unimem folder contains the Linux kernel module for memory allocation.
+
+aux-src contains the source code for auxiliary libraries. The compiled versions of these libraries are
+located in the aux folder.
+
+A sample OpenCL application adapted from SnuCL distribution named ocltestapp.c is located in the il/test folder.
+
+Numerous tests are located in cpp/test_* directories. Most of them are out of date and won't build. Some need to be
+built using a Makefile, some can be built in-place by using the corresponding bash script.
+
+The bitstreams files are stored in cpp/test\_bistream\_manager folder.
+
+# Running "ocltestapp"
+Create a build directory. Run make -f (path\_to\_makefile)/Makefile. Don't run install - this in only meant
+for petalinux builds.
+
+default\_config.xml and bitstream\_1.xml will be symlinked into the build directory. Update the BitstreamsPath
+in the configuration file to point to a location where the xml files are stored, e.g. a build directory.
+
+run\_ocltestapp.sh will be symlinked into the build directory as well.
+
+Manually build the unimem driver and load it into the kernel.
+
+Execute run\_ocltestapp.sh. It should run with a lot of debug logging.

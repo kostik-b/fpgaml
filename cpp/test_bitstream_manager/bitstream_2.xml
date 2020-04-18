@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <header>
+        <hw>bitstream_2</hw>
+        <target>XCZU9EG</target>
+        <resource-string>ImsLMsLRsLMsDMsLMsLRsLMsDMsLMsDMsLMsLRsLMsDMsLMsLRsLMsDMsLMsDMsLMsLRsLMsDMsLMsLRsLMsDMsLMsDMsLMsLRsLMsDMsLMsDMsLMsDMsLMsLRsLMsDMsLMsLRsLMs</resource-string>
+        <num_accelerators>1</num_accelerators>
+        <workgroup_size>1920</workgroup_size>
+        <local_cost>100</local_cost>
+        <remote_cost>110</remote_cost>
+        <n_args>14</n_args>
+        <offset_address_0>0x28</offset_address_0>
+        <offset_address_1>0x2c</offset_address_1>
+        <offset_address_2>0x34</offset_address_2>
+        <offset_address_3>0x38</offset_address_3>
+        <offset_address_4>0x40</offset_address_4>
+        <offset_address_5>0x44</offset_address_5>
+        <offset_address_6>0x4c</offset_address_6>
+        <offset_address_7>0x50</offset_address_7>
+        <offset_address_8>0x58</offset_address_8>
+        <offset_address_9>0x60</offset_address_9>
+        <offset_address_10>0x68</offset_address_10>
+        <offset_address_11>0x70</offset_address_11>
+        <offset_address_12>0x78</offset_address_12>
+        <offset_address_13>0x7c</offset_address_13>
+    </header>
+    <body>
+        <length>7</length>
+        <bitstream>ABCDEFG</bitstream>
+    </body>
+</data>

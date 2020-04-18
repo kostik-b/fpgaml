@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <header>
+        <hw>bitstream_1</hw>
+        <target>XCZU9EG</target>
+        <resource-string>ImsLMsLRsLMsDMsLMsLRsLMsDMsLMsDMsLMsLRsLMsDMsLMsLRsLMsDMsLMsDMsLMsLRsLMsDMsLMsLRsLMsDMsLMsDMsLMsLRsLMsDMsLMsDMsLMsDMsLMsLRsLMsDMsLMsLRsLMs</resource-string>
+        <num_accelerators>1</num_accelerators>
+        <workgroup_size>2048</workgroup_size>
+        <local_cost>700</local_cost>
+        <remote_cost>1500</remote_cost>
+        <n_args>8</n_args>
+        <offset_address_0>0x00</offset_address_0>
+        <offset_address_1>0x28</offset_address_1>
+        <offset_address_2>0x30</offset_address_2>
+        <offset_address_3>0x38</offset_address_3>
+        <offset_address_4>0x40</offset_address_4>
+        <offset_address_5>0x44</offset_address_5>
+        <offset_address_6>0x4c</offset_address_6>
+        <offset_address_7>0x50</offset_address_7>
+    </header>
+    <body>
+        <length>7</length>
+        <bitstream>ABCDEFG</bitstream>
+    </body>
+</data>
